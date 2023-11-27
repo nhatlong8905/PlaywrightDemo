@@ -29,7 +29,7 @@ const config = {
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry */
-  retries: process.env.CI ? 2 : 2,
+  retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests */
   workers: process.env.CI ? 1 : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -66,6 +66,7 @@ const config = {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        viewport: {width: 1920, height: 1080},
       },
     },
 

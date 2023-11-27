@@ -13,7 +13,7 @@ export default class PracticePage {
     readonly lastName = '#lastName';
     readonly userEmail = '#userEmail';
     readonly radio_checkbox = {
-        item: (name: string) => `label[class="custom-control-label"] >> value=${name}`,
+        item: (name: string) => `label[class="custom-control-label"] >> text=${name}`,
     };
     readonly userNumber = '#userNumber';
     readonly dateOfbirth = '#dateOfBirthInput';
@@ -32,6 +32,7 @@ export default class PracticePage {
     }
 
     public async fillNameAndEmail(firstName: string, lastName: string, email:string){
+        await this.page.locator(this.firstName).fill(firstName);
         await this.ui.editBox(this.firstName).fillAndTab(firstName);
         await this.ui.editBox(this.lastName).fillAndTab(lastName);
         await this.ui.editBox(this.userEmail).fillAndTab(email);
@@ -45,11 +46,8 @@ export default class PracticePage {
     }
 
     public async fillHobiesPictureAndCurrentAddress(hobies: string, fileName: string, address: string){
+        await this.page.setInputFiles('#uploadPicture', `/src/resources/uploadFiles/${fileName}`);
         await this.ui.element(this.radio_checkbox.item(hobies)).click();
-        const fileChooserPromise = this.page.waitForEvent('filechooser');
-        await this.page.click('text="Choose File"');
-        const fileChooser = await fileChooserPromise;
-        await fileChooser.setFiles(`/src/resources/uploadFiles/${fileName}`);
         await this.ui.editBox(this.currentAddress).fillAndTab(address);
     }
 

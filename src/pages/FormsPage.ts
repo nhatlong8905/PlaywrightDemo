@@ -14,7 +14,8 @@ export default class FormsPage {
 
     public async gotoMenuItem(item: string) {
         await test.step(`Navigating to ${item}`, async () => {
-            await this.ui.element(this.menu.item(item)).click();
+            await this.page.locator(this.menu.item(item)).click();
+            // await this.ui.element(this.menu.item(item)).click();
         });
     }
 }

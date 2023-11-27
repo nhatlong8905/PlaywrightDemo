@@ -7,33 +7,31 @@ import PracticePage from 'pages/PracticePage';
 
 const SHEET1 = "Demo";
 const data = ExcelUtil.getTestDataArray(SHEET1);
-test(`Test QA tool`, async ({browser}) => {
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    const home = new HomePage(page);
-    await home.launchApplication();
-    await home.gotoTab("DEMO SITE")
-
-    const pagePromise = context.waitForEvent('page');
-    const newPage = await pagePromise;
-    await newPage.waitForLoadState();
-    const demo = new DemoPage(newPage);
-    await demo.gotoCard("Forms");
-
-    const forms = new FormsPage(newPage);
-    await forms.gotoMenuItem("Practice Form")
-
-    const practice = new PracticePage(page);
-
-    data.forEach(item =>{
-        test.step(`${item.Description}`, async () => {
-            await practice.fillNameAndEmail(item.FirstName, item.LastName, item.Email);
-            await practice.fillGenderdNumberBirthAndSubjects(item.Gender, item.Mobile, item.Subject, item.Birth);
-            await practice.fillHobiesPictureAndCurrentAddress(item.Hobies, item.FileName, item.Address);
-            await practice.selectField("Select State", item.State);
-            await practice.selectField("Select City", item.City);
-            await practice.submitForm();
-            await practice.validationSubmitSuccess();
-        });
-    })
-});
+data.forEach(item =>{
+    test(`Test QA tool with description  ${item.Description}`, async ({browser}) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        const home = new HomePage(page);
+        await home.launchApplication();
+        await home.gotoTab("DEMO SITE")
+        
+        const pagePromise = context.waitForEvent('page');
+        const newPage = await pagePromise;
+        await newPage.waitForLoadState();
+        const demo = new DemoPage(newPage);
+        const forms = new FormsPage(newPage);
+        const practice = new PracticePage(newPage);
+    
+        await demo.gotoCard("Forms");
+        await forms.gotoMenuItem("Practice Form")
+    
+        await practice.fillNameAndEmail(item.FirstName, item.LastName, item.Email);
+        await practice.fillGenderdNumberBirthAndSubjects(item.Gender, item.Mobile.toString(), item.Subject, item.Birth);
+        await practice.fillHobiesPictureAndCurrentAddress(item.Hobies, item.FileName, item.Address);
+        await practice.selectField("Select State", item.State);
+        await practice.selectField("Select City", item.City);
+        await practice.submitForm();
+        await practice.validationSubmitSuccess();
+    
+    });
+})
